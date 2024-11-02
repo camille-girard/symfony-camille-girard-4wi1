@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
+
     #[Route(path: '/', name: 'home')]
     public function home(): Response
     {
