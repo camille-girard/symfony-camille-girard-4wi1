@@ -23,7 +23,7 @@ class Media
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $short_desicription = null;
+    private ?string $short_description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $long_description = null;
@@ -98,14 +98,14 @@ class Media
         return $this;
     }
 
-    public function getShortDesicription(): ?string
+    public function getShortDescription(): ?string
     {
-        return $this->short_desicription;
+        return $this->short_description;
     }
 
-    public function setShortDesicription(string $short_desicription): static
+    public function setShortDescription(string $short_description): static
     {
-        $this->short_desicription = $short_desicription;
+        $this->short_description = $short_description;
 
         return $this;
     }
