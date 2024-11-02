@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SubscriptionRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionRepository::class)]
@@ -21,6 +23,17 @@ class Subscription
 
     #[ORM\Column]
     private ?int $duration = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
+    private Collection $subscriber;
+
+    public function __construct()
+    {
+        $this->subscriber = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -59,6 +72,36 @@ class Subscription
     public function setDuration(int $duration): static
     {
         $this->duration = $duration;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getSubscriber(): Collection
+    {
+        return $this->subscriber;
+    }
+
+    public function addSubscriber(User $subscriber): static
+    {
+        if (!$this->subscriber->contains($subscriber)) {
+            $this->subscriber->add($subscriber);
+            $subscriber->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriber(User $subscriber): static
+    {
+        if ($this->subscriber->removeElement($subscriber)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriber->getSubscription() === $this) {
+                $subscriber->setSubscription(null);
+            }
+        }
 
         return $this;
     }
