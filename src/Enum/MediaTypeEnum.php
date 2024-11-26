@@ -1,9 +1,9 @@
 <?php
+
 namespace App\Enum;
 
-enum MediaTypeEnum: string {
-    case VALID = 'valid';
-    case PENDING = 'pending';
-    case REJECTED = 'rejected';
+enum MediaTypeEnum: string
+{
+    case MOVIE = 'movie';
+    case TV_SHOW = 'tv_show';
 }
-?>

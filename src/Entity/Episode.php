@@ -20,7 +20,7 @@ class Episode
     private ?int $duration = null;
 
     #[ORM\Column]
-    private ?int $release_date = null;
+    private ?\DateTimeImmutable $releasedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'episodes')]
     #[ORM\JoinColumn(nullable: false)]
@@ -55,14 +55,14 @@ class Episode
         return $this;
     }
 
-    public function getReleaseDate(): ?int
+    public function getReleasedAt(): ?\DateTimeImmutable
     {
-        return $this->release_date;
+        return $this->releasedAt;
     }
 
-    public function setReleaseDate(int $release_date): static
+    public function setReleasedAt(\DateTimeImmutable $releasedAt): static
     {
-        $this->release_date = $release_date;
+        $this->releasedAt = $releasedAt;
 
         return $this;
     }

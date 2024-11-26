@@ -27,12 +27,19 @@ class Subscription
     /**
      * @var Collection<int, User>
      */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscription')]
-    private Collection $subscriber;
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'currentSubscription')]
+    private Collection $users;
+
+    /**
+     * @var Collection<int, SubscriptionHistory>
+     */
+    #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscription')]
+    private Collection $subscriptionHistories;
 
     public function __construct()
     {
-        $this->subscriber = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->subscriptionHistories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -79,27 +86,57 @@ class Subscription
     /**
      * @return Collection<int, User>
      */
-    public function getSubscriber(): Collection
+    public function getUsers(): Collection
     {
-        return $this->subscriber;
+        return $this->users;
     }
 
-    public function addSubscriber(User $subscriber): static
+    public function addUser(User $user): static
     {
-        if (!$this->subscriber->contains($subscriber)) {
-            $this->subscriber->add($subscriber);
-            $subscriber->setSubscription($this);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setCurrentSubscription($this);
         }
 
         return $this;
     }
 
-    public function removeSubscriber(User $subscriber): static
+    public function removeUser(User $user): static
     {
-        if ($this->subscriber->removeElement($subscriber)) {
+        if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($subscriber->getSubscription() === $this) {
-                $subscriber->setSubscription(null);
+            if ($user->getCurrentSubscription() === $this) {
+                $user->setCurrentSubscription(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SubscriptionHistory>
+     */
+    public function getSubscriptionHistories(): Collection
+    {
+        return $this->subscriptionHistories;
+    }
+
+    public function addSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
+    {
+        if (!$this->subscriptionHistories->contains($subscriptionHistory)) {
+            $this->subscriptionHistories->add($subscriptionHistory);
+            $subscriptionHistory->setSubscription($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
+    {
+        if ($this->subscriptionHistories->removeElement($subscriptionHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionHistory->getSubscription() === $this) {
+                $subscriptionHistory->setSubscription(null);
             }
         }
 

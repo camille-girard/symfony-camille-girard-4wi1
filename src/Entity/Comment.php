@@ -6,6 +6,7 @@ use App\Enum\CommentStatusEnum;
 use App\Repository\CommentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
@@ -16,34 +17,33 @@ class Comment
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
-
-    #[ORM\Column]
-    private ?int $media_id = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $content = null;
 
     #[ORM\Column(enumType: CommentStatusEnum::class)]
     private ?CommentStatusEnum $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?user $author = null;
-
-    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'comments')]
-    private ?self $parent = null;
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childComments')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?self $parentComment = null;
 
     /**
      * @var Collection<int, self>
      */
-    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private Collection $comments;
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parentComment')]
+    private Collection $childComments;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $publisher = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Media $media = null;
 
     public function __construct()
     {
-        $this->comments = new ArrayCollection();
+        $this->childComments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -51,26 +51,14 @@ class Comment
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    public function getContent(): ?string
     {
-        return $this->user_id;
+        return $this->content;
     }
 
-    public function setUserId(int $user_id): static
+    public function setContent(string $content): static
     {
-        $this->user_id = $user_id;
-
-        return $this;
-    }
-
-    public function getMediaId(): ?int
-    {
-        return $this->media_id;
-    }
-
-    public function setMediaId(int $media_id): static
-    {
-        $this->media_id = $media_id;
+        $this->content = $content;
 
         return $this;
     }
@@ -87,26 +75,14 @@ class Comment
         return $this;
     }
 
-    public function getAuthor(): ?user
+    public function getParentComment(): ?self
     {
-        return $this->author;
+        return $this->parentComment;
     }
 
-    public function setAuthor(?user $author): static
+    public function setParentComment(?self $parentComment): static
     {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    public function getParent(): ?self
-    {
-        return $this->parent;
-    }
-
-    public function setParent(?self $parent): static
-    {
-        $this->parent = $parent;
+        $this->parentComment = $parentComment;
 
         return $this;
     }
@@ -114,29 +90,41 @@ class Comment
     /**
      * @return Collection<int, self>
      */
-    public function getComments(): Collection
+    public function getChildComments(): Collection
     {
-        return $this->comments;
+        return $this->childComments;
     }
 
-    public function addComment(self $comment): static
+    public function addChildComment(self $childComment): static
     {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setParent($this);
+        if (!$this->childComments->contains($childComment)) {
+            $this->childComments->add($childComment);
+            $childComment->setParentComment($this);
         }
 
         return $this;
     }
 
-    public function removeComment(self $comment): static
+    public function removeChildComment(self $childComment): static
     {
-        if ($this->comments->removeElement($comment)) {
+        if ($this->childComments->removeElement($childComment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getParent() === $this) {
-                $comment->setParent(null);
+            if ($childComment->getParentComment() === $this) {
+                $childComment->setParentComment(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPublisher(): ?User
+    {
+        return $this->publisher;
+    }
+
+    public function setPublisher(?User $publisher): static
+    {
+        $this->publisher = $publisher;
 
         return $this;
     }

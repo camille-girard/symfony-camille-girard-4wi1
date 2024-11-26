@@ -27,13 +27,19 @@ class User
     private ?string $password = null;
 
     #[ORM\Column(enumType: UserAccountStatusEnum::class)]
-    private ?UserAccountStatusEnum $account_status = null;
+    private ?UserAccountStatusEnum $accountStatus = UserAccountStatusEnum::INACTIVE;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Subscription $currentSubscription = null;
 
     /**
      * @var Collection<int, Comment>
      */
-    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'author')]
+    #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'publisher')]
     private Collection $comments;
+
+    #[ORM\Column(length: 255)]
+    private ?string $profilePicture = '';
 
     /**
      * @var Collection<int, Playlist>
@@ -47,12 +53,11 @@ class User
     #[ORM\OneToMany(targetEntity: PlaylistSubscription::class, mappedBy: 'subscriber')]
     private Collection $playlistSubscriptions;
 
-    #[ORM\ManyToOne(inversedBy: 'subscriber')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?SubscriptionHistory $subscriptionHistory = null;
-
-    #[ORM\ManyToOne(inversedBy: 'subscriber')]
-    private ?Subscription $subscription = null;
+    /**
+     * @var Collection<int, SubscriptionHistory>
+     */
+    #[ORM\OneToMany(targetEntity: SubscriptionHistory::class, mappedBy: 'subscriber')]
+    private Collection $subscriptionHistories;
 
     /**
      * @var Collection<int, WatchHistory>
@@ -65,6 +70,7 @@ class User
         $this->comments = new ArrayCollection();
         $this->playlists = new ArrayCollection();
         $this->playlistSubscriptions = new ArrayCollection();
+        $this->subscriptionHistories = new ArrayCollection();
         $this->watchHistories = new ArrayCollection();
     }
 
@@ -111,12 +117,24 @@ class User
 
     public function getAccountStatus(): ?UserAccountStatusEnum
     {
-        return $this->account_status;
+        return $this->accountStatus;
     }
 
-    public function setAccountStatus(UserAccountStatusEnum $account_status): static
+    public function setAccountStatus(UserAccountStatusEnum $accountStatus): static
     {
-        $this->account_status = $account_status;
+        $this->accountStatus = $accountStatus;
+
+        return $this;
+    }
+
+    public function getCurrentSubscription(): ?Subscription
+    {
+        return $this->currentSubscription;
+    }
+
+    public function setCurrentSubscription(?Subscription $currentSubscription): static
+    {
+        $this->currentSubscription = $currentSubscription;
 
         return $this;
     }
@@ -133,7 +151,7 @@ class User
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setAuthor($this);
+            $comment->setPublisher($this);
         }
 
         return $this;
@@ -143,10 +161,22 @@ class User
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getAuthor() === $this) {
-                $comment->setAuthor(null);
+            if ($comment->getPublisher() === $this) {
+                $comment->setPublisher(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(string $profilePicture): static
+    {
+        $this->profilePicture = $profilePicture;
 
         return $this;
     }
@@ -211,26 +241,32 @@ class User
         return $this;
     }
 
-    public function getSubscriptionHistory(): ?SubscriptionHistory
+    /**
+     * @return Collection<int, SubscriptionHistory>
+     */
+    public function getSubscriptionHistories(): Collection
     {
-        return $this->subscriptionHistory;
+        return $this->subscriptionHistories;
     }
 
-    public function setSubscriptionHistory(?SubscriptionHistory $subscriptionHistory): static
+    public function addSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
     {
-        $this->subscriptionHistory = $subscriptionHistory;
+        if (!$this->subscriptionHistories->contains($subscriptionHistory)) {
+            $this->subscriptionHistories->add($subscriptionHistory);
+            $subscriptionHistory->setSubscriber($this);
+        }
 
         return $this;
     }
 
-    public function getSubscription(): ?Subscription
+    public function removeSubscriptionHistory(SubscriptionHistory $subscriptionHistory): static
     {
-        return $this->subscription;
-    }
-
-    public function setSubscription(?Subscription $subscription): static
-    {
-        $this->subscription = $subscription;
+        if ($this->subscriptionHistories->removeElement($subscriptionHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($subscriptionHistory->getSubscriber() === $this) {
+                $subscriptionHistory->setSubscriber(null);
+            }
+        }
 
         return $this;
     }

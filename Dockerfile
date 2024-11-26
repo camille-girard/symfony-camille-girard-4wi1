@@ -86,7 +86,7 @@ RUN set -eux; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
 # copy sources
-COPY --link . ./
+COPY --link symfony-4iw2 ./
 RUN rm -Rf frankenphp/
 
 RUN set -eux; \

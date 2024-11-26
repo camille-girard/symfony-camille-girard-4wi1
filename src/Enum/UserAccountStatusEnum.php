@@ -1,11 +1,11 @@
 <?php
+
 namespace App\Enum;
 
-enum UserAccountStatusEnum: string {
-    case VALID = 'valid';
-    case PENDING = 'pending';
+enum UserAccountStatusEnum: string
+{
+    case ACTIVE = 'active';
+    case INACTIVE = 'inactive';
     case BLOCKED = 'blocked';
-    CASE BANNED = 'banned';
-    case DELETED = 'deleted';
+    case BANNED = 'banned';
 }
-?>

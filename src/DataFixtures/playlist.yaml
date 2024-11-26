@@ -1,5 +1,0 @@
-App\Entity\Playlist:
-    playlist_{1..20}:
-        title: 'Playlist n°<current()>'
-        description: '<{paragraph}>'
-        createdAt: '<{dateTimeBetween("-1 year", "now")}>'

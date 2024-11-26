@@ -19,20 +19,20 @@ class Playlist
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?int $created_at = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private ?int $update_at = null;
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    /**
+     * @var Collection<int, PlaylistSubscription>
+     */
+    #[ORM\OneToMany(targetEntity: PlaylistSubscription::class, mappedBy: 'playlist')]
+    private Collection $playlistSubscriptions;
 
     #[ORM\ManyToOne(inversedBy: 'playlists')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
-
-    /**
-     * @var Collection<int, playlistSubscription>
-     */
-    #[ORM\OneToMany(targetEntity: playlistSubscription::class, mappedBy: 'playlist', orphanRemoval: true)]
-    private Collection $subscription;
 
     /**
      * @var Collection<int, PlaylistMedia>
@@ -42,7 +42,7 @@ class Playlist
 
     public function __construct()
     {
-        $this->subscription = new ArrayCollection();
+        $this->playlistSubscriptions = new ArrayCollection();
         $this->playlistMedia = new ArrayCollection();
     }
 
@@ -63,26 +63,56 @@ class Playlist
         return $this;
     }
 
-    public function getCreatedAt(): ?int
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
-    public function setCreatedAt(int $created_at): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdateAt(): ?int
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
-        return $this->update_at;
+        return $this->updatedAt;
     }
 
-    public function setUpdateAt(int $update_at): static
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
     {
-        $this->update_at = $update_at;
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PlaylistSubscription>
+     */
+    public function getPlaylistSubscriptions(): Collection
+    {
+        return $this->playlistSubscriptions;
+    }
+
+    public function addPlaylistSubscription(PlaylistSubscription $playlistSubscription): static
+    {
+        if (!$this->playlistSubscriptions->contains($playlistSubscription)) {
+            $this->playlistSubscriptions->add($playlistSubscription);
+            $playlistSubscription->setPlaylist($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlaylistSubscription(PlaylistSubscription $playlistSubscription): static
+    {
+        if ($this->playlistSubscriptions->removeElement($playlistSubscription)) {
+            // set the owning side to null (unless already changed)
+            if ($playlistSubscription->getPlaylist() === $this) {
+                $playlistSubscription->setPlaylist(null);
+            }
+        }
 
         return $this;
     }
@@ -95,36 +125,6 @@ class Playlist
     public function setCreator(?User $creator): static
     {
         $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, playlistSubscription>
-     */
-    public function getSubscription(): Collection
-    {
-        return $this->subscription;
-    }
-
-    public function addSubscription(playlistSubscription $subscription): static
-    {
-        if (!$this->subscription->contains($subscription)) {
-            $this->subscription->add($subscription);
-            $subscription->setPlaylist($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubscription(playlistSubscription $subscription): static
-    {
-        if ($this->subscription->removeElement($subscription)) {
-            // set the owning side to null (unless already changed)
-            if ($subscription->getPlaylist() === $this) {
-                $subscription->setPlaylist(null);
-            }
-        }
 
         return $this;
     }

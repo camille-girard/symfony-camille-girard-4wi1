@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\SubscriptionHistoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SubscriptionHistoryRepository::class)]
@@ -16,80 +14,56 @@ class SubscriptionHistory
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $start_date = null;
+    private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column]
-    private ?int $end_date = null;
+    private ?\DateTimeImmutable $endAt = null;
 
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'subscriptionHistory')]
-    private Collection $subscriber;
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $subscriber = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'subscriptionHistories')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Subscription $subscription = null;
-
-    public function __construct()
-    {
-        $this->subscriber = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStartDate(): ?int
+    public function getStartAt(): ?\DateTimeImmutable
     {
-        return $this->start_date;
+        return $this->startAt;
     }
 
-    public function setStartDate(int $start_date): static
+    public function setStartAt(\DateTimeImmutable $startAt): static
     {
-        $this->start_date = $start_date;
+        $this->startAt = $startAt;
 
         return $this;
     }
 
-    public function getEndDate(): ?int
+    public function getEndAt(): ?\DateTimeImmutable
     {
-        return $this->end_date;
+        return $this->endAt;
     }
 
-    public function setEndDate(int $end_date): static
+    public function setEndAt(\DateTimeImmutable $endAt): static
     {
-        $this->end_date = $end_date;
+        $this->endAt = $endAt;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getSubscriber(): Collection
+    public function getSubscriber(): ?User
     {
         return $this->subscriber;
     }
 
-    public function addSubscriber(User $subscriber): static
+    public function setSubscriber(?User $subscriber): static
     {
-        if (!$this->subscriber->contains($subscriber)) {
-            $this->subscriber->add($subscriber);
-            $subscriber->setSubscriptionHistory($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSubscriber(User $subscriber): static
-    {
-        if ($this->subscriber->removeElement($subscriber)) {
-            // set the owning side to null (unless already changed)
-            if ($subscriber->getSubscriptionHistory() === $this) {
-                $subscriber->setSubscriptionHistory(null);
-            }
-        }
+        $this->subscriber = $subscriber;
 
         return $this;
     }

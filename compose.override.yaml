@@ -2,7 +2,7 @@
 services:
   php:
     build:
-      context: .
+      context: symfony-4iw2
       target: frankenphp_dev
     volumes:
       - ./:/app
