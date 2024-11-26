@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[AsController]
 class AdminController extends AbstractController
 {
-    #[Route('/admin', name: 'page_admin')]
+    #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
         return $this->render('admin/admin.html.twig');
