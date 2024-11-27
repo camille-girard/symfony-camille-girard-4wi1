@@ -8,12 +8,3 @@ App\Entity\Category:
     category_comedie:
         nom: 'comedie'
         label: 'Comedie'
-    category_drame:
-        nom: 'drame'
-        label: 'Drame'
-    category_fantastique:
-        nom: 'fantastique'
-        label: 'Fantastique'
-    category_horreur:
-        nom: 'horreur'
-        label: 'Horreur'
