@@ -18,7 +18,17 @@
             <script src="https://cdn.tailwindcss.com"></script>
         {% endblock %}
     </head>
-    <body>
-    {% block body %}{% endblock %}
+    <body class="font-montserrat text-sm bg-white " >
+    <div class="flex min-h-screen  2xl:max-w-screen-2xl 2xl:mx-auto 2xl:border-x-2 2xl:border-gray-200">
+        {% block left_menu %}
+            {% include 'parts/left-menu.html.twig' %}
+        {% endblock %}
+        <main class=" flex-1 py-10  px-5 sm:px-10 ">
+            {% block content %}{% endblock %}
+        </main>
+        {% block right_menu %}
+            {% include 'parts/right-sidebar.html.twig' %}
+        {% endblock %}
+    </div>
     </body>
 </html>
