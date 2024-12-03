@@ -21,19 +21,16 @@ class ListMovieController extends AbstractController
         PlaylistSubscriptionRepository $playlistSubscriptionRepository,
         PlaylistRepository $playlistRepository,
         CategoryRepository $categoryRepository,
-        Request $request,
-    ): Response
-    {
+        Request $request
+    ): Response {
         $myPlaylists = $playlistRepository->findAll();
         $subscribedPlaylists = $playlistSubscriptionRepository->findAll();
         $categories = $categoryRepository->findAll();
 
-        $selectedPlaylistId = $request->query->get('playlist', null);
-        if ($selectedPlaylistId) {
-            $selectedPlaylist = $playlistRepository->find($selectedPlaylistId);
-        } else {
-            $selectedPlaylist = null;
-        }
+        $selectedPlaylistId = $request->query->get('playlist');
+        $selectedPlaylist = $selectedPlaylistId
+            ? $playlistRepository->find($selectedPlaylistId)
+            : null;
 
         return $this->render('movie/lists.html.twig', [
             'myPlaylists' => $myPlaylists,
