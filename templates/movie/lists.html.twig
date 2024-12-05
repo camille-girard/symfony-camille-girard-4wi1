@@ -21,6 +21,17 @@
                 <div class="border p-4 rounded mb-4">
                     <h2 class="font-bold text-xl">{{ selectedPlaylist.name }}</h2>
                     <p class="text-gray-600">Description : {{ selectedPlaylist.description }}</p>
+
+                    <h3 class="font-bold text-lg mt-4">Médias associés :</h3>
+                    {% if selectedPlaylist.playlistMedia|length > 0 %}
+                        <ul class="list-disc ml-6">
+                            {% for media in selectedPlaylist.playlistMedia %}
+                                <li>{{ media.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-gray-500">Aucun média associé à cette playlist.</p>
+                    {% endif %}
                 </div>
             {% else %}
                 <p>Veuillez sélectionner une playlist pour afficher les détails.</p>
