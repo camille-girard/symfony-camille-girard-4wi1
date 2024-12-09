@@ -4,21 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use App\Repository\MediaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route(path: '/', name: 'home')]
-    public function home(): Response
-    {
+    private $mediaRepository;
 
-        return $this->render(view: 'index.html.twig');
+    public function __construct(MediaRepository $mediaRepository)
+    {
+        $this->mediaRepository = $mediaRepository;
+    }
+
+    #[Route('/', name: 'home')]
+    public function index(): Response
+    {
+        $popularMovies = $this->mediaRepository->findPopular();
+
+        return $this->render('index.html.twig', [
+            'popularMovies' => $popularMovies,
+        ]);
     }
 }
