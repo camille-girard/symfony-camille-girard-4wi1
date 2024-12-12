@@ -1,19 +1,42 @@
 App\Entity\Media:
-  media (template):
-    title: 'Media <current()>'
-    shortDescription: 'short description'
-    longDescription: '<realText()>'
-    releaseDate: '<datetime()>'
-    coverImage: 'https://picsum.photos/400/550?random=<numberBetween(1, 100)>'
+    media (template):
+        title: 'Media <current()>'
+        shortDescription: 'short description'
+        longDescription: '<realText()>'
+        releaseDate: '<datetime()>'
+        coverImage: 'https://picsum.photos/400/550?random=<numberBetween(1, 100)>'
 
 App\Entity\Movie:
-  media_movie_{1..50} (extends media):
-    title: 'Movie <current()>'
+    media_action_1 (extends media):
+        title: 'Action Movie 1'
+        shortDescription: 'Un film d’action palpitant.'
+        longDescription: 'Ceci est une longue description pour un film d’action.'
+        releaseDate: '<datetime()>'
+        coverImage: 'https://picsum.photos/400/550?random=1'
+        categories: ['@category_action']
+    
+    media_aventure_1 (extends media):
+        title: 'Aventure Movie 1'
+        shortDescription: 'Un film d’aventure passionnant.'
+        longDescription: 'Ceci est une longue description pour un film d’aventure.'
+        releaseDate: '<datetime()>'
+        coverImage: 'https://picsum.photos/400/550?random=2'
+        categories: ['@category_aventure']
+    
+    media_comedie_1 (extends media):
+        title: 'Comedy Movie 1'
+        shortDescription: 'Une comédie hilarante.'
+        longDescription: 'Ceci est une longue description pour une comédie.'
+        releaseDate: '<datetime()>'
+        coverImage: 'https://picsum.photos/400/550?random=3'
+        categories: ['@category_comedie']
+    
+    media_movie_{1..50} (extends media):
+        title: 'Movie <current()>'
 
 App\Entity\Serie:
-  media_serie_{1..50} (extends media):
-    title: 'Serie <current()>'
-
+    media_serie_{1..50} (extends media):
+        title: 'Serie <current()>'
 
 App\Entity\Season:
   season_1_{@media_serie*}:

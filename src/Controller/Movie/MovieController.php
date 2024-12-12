@@ -4,31 +4,25 @@ declare(strict_types=1);
 
 namespace App\Controller\Movie;
 
-use App\Repository\MovieRepository;
+use App\Entity\Movie;
+use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class MovieController extends AbstractController
 {
-    private MovieRepository $movieRepository;
-
-    public function __construct(MovieRepository $movieRepository)
+    #[Route('/media/{id}', name: 'movie_detail')]
+    public function detail(Media $media): Response
     {
-        $this->movieRepository = $movieRepository;
+        return $this->render('movie/detail.html.twig', [
+            'media' => $media,
+        ]);
     }
 
-    #[Route('/media/{id}', name: 'media_detail')]
-    public function detail(int $id): Response
+    #[Route('/media/detail-serie', name: 'movie_detail_serie')]
+    public function detail_serie(): Response
     {
-        $movie = $this->movieRepository->find($id);
-
-        if (!$movie) {
-            throw $this->createNotFoundException('The media does not exist');
-        }
-
-        return $this->render('movie/detail.html.twig', [
-            'movie' => $movie,
-        ]);
+        return $this->render('movie/detail_serie.html.twig');
     }
 }

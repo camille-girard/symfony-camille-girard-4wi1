@@ -12,9 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class SubscribeController extends AbstractController
 {
     #[Route('/subscribe', name: 'subscribe')]
-    public function index(
-        SubscriptionRepository $subscriptionRepository
-    ): Response
+    public function index(SubscriptionRepository $subscriptionRepository): Response
     {
         $subscriptions = $subscriptionRepository->findAll();
 

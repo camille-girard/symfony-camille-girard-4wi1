@@ -1,0 +1,9 @@
+<li class="relative flex flex-col rounded-xl overflow-hidden aspect-square border">
+    <img src="{{ movie.coverImage }}" class="h-4/5 object-cover w-full" alt="{{ movie.title }}">
+    <div class="w-full h-full bg-white px-3 flex items-center justify-between border-t-2 border-t-red-600">
+        <span class="capitalize font-medium pr-2">{{ movie.title }}</span>
+        <div class="flex space-x-2 items-center text-xs">
+            <span>{{ movie.popularityScore }}</span>
+        </div>
+    </div>
+</li>

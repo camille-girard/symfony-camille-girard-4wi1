@@ -2,7 +2,7 @@
 services:
   php:
     build:
-      context: symfony-4iw2
+      context: ../../Desktop/symfony-4iw2-main
       target: frankenphp_dev
     volumes:
       - ./:/app

@@ -13,15 +13,18 @@ class MediaRepository extends ServiceEntityRepository
         parent::__construct($registry, Media::class);
     }
 
+    /**
+     * Récupérer les films les plus populaires en fonction du nombre de visionnages
+     */
     public function findPopular(): array
     {
         return $this->createQueryBuilder('m')
-            ->select('m')
-            ->leftJoin('m.watchHistories', 'wh')
+            ->leftJoin('m.watchHistories', 'w')
             ->groupBy('m.id')
-            ->orderBy('COUNT(wh.id)', 'DESC')
+            ->orderBy('COUNT(w.id)', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
+
 }

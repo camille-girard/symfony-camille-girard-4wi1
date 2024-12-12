@@ -1,26 +1,26 @@
 {
+    "name": "symfony/skeleton",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
+    "description": "A minimal Symfony project recommended to create bare bones applications",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3.12",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.13",
-        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.2",
         "hautelook/alice-bundle": "^2.14",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/console": "7.1.*",
         "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.1.*",
-        "symfony/mime": "7.1.*",
         "symfony/monolog-bundle": "^3.0",
         "symfony/runtime": "7.1.*",
-        "symfony/security-bundle": "7.1.*",
         "symfony/twig-bundle": "7.1.*",
         "symfony/yaml": "7.1.*"
     },
@@ -70,10 +70,12 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.1.*"
+            "require": "7.1.*",
+            "docker": true
         }
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.6",
         "symfony/debug-bundle": "7.1.*",
         "symfony/maker-bundle": "^1.61",
         "symfony/stopwatch": "7.1.*",

@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Catégorie : {{ category.label }}{% endblock %}
-
+{% block title %}Catégorie : {{ category.nom }}{% endblock %}
 {% block content %}
         <section>
             <div class="flex flex-row items-center space-x-6">
@@ -38,12 +36,9 @@
             </div>
 
             <ul class="mt-4 grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5 ">
-                {% include 'parts/square-card-movie.html.twig' %}
-                {% include 'parts/square-card-movie.html.twig' %}
-                {% include 'parts/square-card-movie.html.twig' %}
-                {% for i in 1..3 %}
-                    {% include 'parts/square-card-movie.html.twig' %}
-                {% endfor %}
+                {% include 'parts/movies/movie-card.html.twig' %}
+                {% include 'parts/movies/movie-card.html.twig' %}
+                {% include 'parts/movies/movie-card.html.twig' %}
             </ul>
         </section>
 
@@ -54,7 +49,7 @@
 
             <ul class="mt-4 grid grid-cols-2 gap-y-5 sm:grid-cols-3 gap-x-5">
                 {% for media in category.media %}
-                    {% include 'parts/big-card-movie.html.twig' %}
+                    {% include 'parts/movies/movie-big-card.html.twig' %}
                 {% endfor %}
             </ul>
             <button class="flex flex-col items-center mt-9 w-full">
@@ -67,4 +62,3 @@
             </button>
         </section>
 {% endblock %}
-
