@@ -7,17 +7,15 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\MediaRepository;
+use Symfony\Bundle\SecurityBundle\Attribute\IsGranted;
 
 class HomeController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route(path: '/', name: 'home')]
-    public function home(MediaRepository $mediaRepository): Response
-    {
-        $popularMovies = $mediaRepository->findPopular();
 
-        return $this->render('index.html.twig', [
-            'popularMovies' => $popularMovies,
-        ]);
+    public function home(): Response
+    {
+        return $this->render(view: 'index.html.twig');
     }
 }

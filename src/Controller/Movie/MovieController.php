@@ -9,7 +9,9 @@ use App\Entity\Media;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class MovieController extends AbstractController
 {
     #[Route('/media/{id}', name: 'movie_detail')]

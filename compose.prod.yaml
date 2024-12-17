@@ -2,7 +2,7 @@
 services:
   php:
     build:
-      context: ../../Desktop/symfony-4iw2-main
+      context: symfony-4iw2-main
       target: frankenphp_prod
     environment:
       APP_SECRET: ${APP_SECRET}

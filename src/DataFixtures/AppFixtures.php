@@ -8,16 +8,26 @@ use App\Entity\Language;
 use App\Entity\Movie;
 use App\Entity\Season;
 use App\Entity\Serie;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     public function load(ObjectManager $manager): void
     {
         $this->setCategory($manager);
         $this->setLanguage($manager);
         $this->setMovie($manager);
+        $this->setUsers($manager);
     }
 
     public function setCategory(ObjectManager $manager): void
@@ -41,9 +51,11 @@ class AppFixtures extends Fixture
 
         foreach ($categories as $value) {
             $category = new Category();
-            $category->setName($value);
+            $category->setNom($value);
             $category->setLabel(strtolower($value));
+            $category->setIcon('https://img.icons8.com/ios/452/movie.png');
             $manager->persist($category);
+
         }
 
         $manager->flush();
@@ -70,7 +82,7 @@ class AppFixtures extends Fixture
 
         foreach ($languages as $key => $value) {
             $language = new Language();
-            $language->setName($key);
+            $language->setNom($key);
             $language->setCode($value);
             $manager->persist($language);
         }
@@ -95,35 +107,25 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    public function setSerie(ObjectManager $manager): void
+    public function setUsers(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 10; ++$i) {
-            $serie = new Serie();
-            $serie->setTitle('Avatar');
-            $serie->setLongDescription(
-                'A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.'
-            );
-            $serie->setShortDescription(
-                'A paraplegic marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.'
-            );
-            $serie->setReleaseDate(new \DateTimeImmutable('2009-12-18'));
-            $serie->setCoverImage('https://fr.web.img4.acsta.net/pictures/22/08/25/09/04/2146702.jpg');
-            $manager->persist($serie);
+        // Création d'un utilisateur simple
+        $user = new User();
+        $user->setEmail('user@example.com');
+        $user->setUsername('user');
+        $hashedPassword = $this->passwordHasher->hashPassword($user, 'password123');
+        $user->setPassword($hashedPassword);
+        $user->setRoles(['ROLE_USER']);
+        $manager->persist($user);
 
-            for ($j = 0; $j < 10; ++$j) {
-                $season = new Season();
-                $season->setNumber($j);
-                $season->setSerieId($serie->getId());
-                $manager->persist($season);
-
-                for ($k = 0; $k < 10; ++$k) {
-                    $episode = new Episode();
-                    $episode->setTitle('Episode '.$k + 1);
-                    $episode->setReleasedAt(new \DateTimeImmutable('2009-12-18'));
-                    $manager->persist($episode);
-                }
-            }
-        }
+        // Création d'un administrateur
+        $admin = new User();
+        $admin->setEmail('cgirard24@myges.fr');
+        $admin->setUsername('admin');
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'password!');
+        $admin->setPassword($hashedPassword);
+        $admin->setRoles(['ROLE_ADMIN']);
+        $manager->persist($admin);
 
         $manager->flush();
     }
