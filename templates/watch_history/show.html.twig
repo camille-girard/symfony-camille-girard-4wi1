@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WatchHistory{% endblock %}
+
+{% block body %}
+    <h1>WatchHistory</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ watch_history.id }}</td>
+            </tr>
+            <tr>
+                <th>LastWatchedAt</th>
+                <td>{{ watch_history.lastWatchedAt ? watch_history.lastWatchedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>NumberOfViews</th>
+                <td>{{ watch_history.numberOfViews }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_watch_history_index') }}">back to list</a>
+
+    <a href="{{ path('app_watch_history_edit', {'id': watch_history.id}) }}">edit</a>
+
+    {{ include('watch_history/_delete_form.html.twig') }}
+{% endblock %}

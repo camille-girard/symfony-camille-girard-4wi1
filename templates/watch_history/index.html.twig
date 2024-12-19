@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}WatchHistory index{% endblock %}
+
+{% block body %}
+    <h1>WatchHistory index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>LastWatchedAt</th>
+                <th>NumberOfViews</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for watch_history in watch_histories %}
+            <tr>
+                <td>{{ watch_history.id }}</td>
+                <td>{{ watch_history.lastWatchedAt ? watch_history.lastWatchedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ watch_history.numberOfViews }}</td>
+                <td>
+                    <a href="{{ path('app_watch_history_show', {'id': watch_history.id}) }}">show</a>
+                    <a href="{{ path('app_watch_history_edit', {'id': watch_history.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_watch_history_new') }}">Create new</a>
+{% endblock %}

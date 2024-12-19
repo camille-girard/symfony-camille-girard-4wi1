@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SubscriptionHistory index{% endblock %}
+
+{% block body %}
+    <h1>SubscriptionHistory index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>StartAt</th>
+                <th>EndAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subscription_history in subscription_histories %}
+            <tr>
+                <td>{{ subscription_history.id }}</td>
+                <td>{{ subscription_history.startAt ? subscription_history.startAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ subscription_history.endAt ? subscription_history.endAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_subscription_history_show', {'id': subscription_history.id}) }}">show</a>
+                    <a href="{{ path('app_subscription_history_edit', {'id': subscription_history.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_subscription_history_new') }}">Create new</a>
+{% endblock %}

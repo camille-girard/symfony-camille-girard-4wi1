@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PlaylistSubscription index{% endblock %}
+
+{% block body %}
+    <h1>PlaylistSubscription index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>SubscribedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for playlist_subscription in playlist_subscriptions %}
+            <tr>
+                <td>{{ playlist_subscription.id }}</td>
+                <td>{{ playlist_subscription.subscribedAt ? playlist_subscription.subscribedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_playlist_subscription_show', {'id': playlist_subscription.id}) }}">show</a>
+                    <a href="{{ path('app_playlist_subscription_edit', {'id': playlist_subscription.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_playlist_subscription_new') }}">Create new</a>
+{% endblock %}

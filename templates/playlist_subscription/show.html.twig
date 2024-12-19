@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PlaylistSubscription{% endblock %}
+
+{% block body %}
+    <h1>PlaylistSubscription</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ playlist_subscription.id }}</td>
+            </tr>
+            <tr>
+                <th>SubscribedAt</th>
+                <td>{{ playlist_subscription.subscribedAt ? playlist_subscription.subscribedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_playlist_subscription_index') }}">back to list</a>
+
+    <a href="{{ path('app_playlist_subscription_edit', {'id': playlist_subscription.id}) }}">edit</a>
+
+    {{ include('playlist_subscription/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Movie index{% endblock %}
+
+{% block body %}
+    <h1>Movie index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>ShortDescription</th>
+                <th>LongDescription</th>
+                <th>ReleaseDate</th>
+                <th>CoverImage</th>
+                <th>Staff</th>
+                <th>Casting</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for movie in movies %}
+            <tr>
+                <td>{{ movie.id }}</td>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.shortDescription }}</td>
+                <td>{{ movie.longDescription }}</td>
+                <td>{{ movie.releaseDate ? movie.releaseDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ movie.coverImage }}</td>
+                <td>{{ movie.staff ? movie.staff|json_encode : '' }}</td>
+                <td>{{ movie.casting ? movie.casting|json_encode : '' }}</td>
+                <td>
+                    <a href="{{ path('app_movie_show', {'id': movie.id}) }}">show</a>
+                    <a href="{{ path('app_movie_edit', {'id': movie.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_movie_new') }}">Create new</a>
+{% endblock %}

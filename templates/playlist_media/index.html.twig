@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}PlaylistMedia index{% endblock %}
+
+{% block body %}
+    <h1>PlaylistMedia index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>AddedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for playlist_media in playlist_media %}
+            <tr>
+                <td>{{ playlist_media.id }}</td>
+                <td>{{ playlist_media.addedAt ? playlist_media.addedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_playlist_media_show', {'id': playlist_media.id}) }}">show</a>
+                    <a href="{{ path('app_playlist_media_edit', {'id': playlist_media.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_playlist_media_new') }}">Create new</a>
+{% endblock %}

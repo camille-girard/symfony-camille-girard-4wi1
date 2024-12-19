@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PlaylistMedia{% endblock %}
+
+{% block body %}
+    <h1>Create new PlaylistMedia</h1>
+
+    {{ include('playlist_media/_form.html.twig') }}
+
+    <a href="{{ path('app_playlist_media_index') }}">back to list</a>
+{% endblock %}

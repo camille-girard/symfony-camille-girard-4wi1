@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New PlaylistSubscription{% endblock %}
+
+{% block body %}
+    <h1>Create new PlaylistSubscription</h1>
+
+    {{ include('playlist_subscription/_form.html.twig') }}
+
+    <a href="{{ path('app_playlist_subscription_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New SubscriptionHistory{% endblock %}
+
+{% block body %}
+    <h1>Create new SubscriptionHistory</h1>
+
+    {{ include('subscription_history/_form.html.twig') }}
+
+    <a href="{{ path('app_subscription_history_index') }}">back to list</a>
+{% endblock %}
